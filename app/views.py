@@ -3,7 +3,7 @@ from django.shortcuts import render
 # Create your views here.
 from app.forms import *
 from django.http import HttpResponse
-
+from django.core.mail import send_mail
 
 def registration(request):
     EUFO=UserForm()
@@ -22,7 +22,12 @@ def registration(request):
             MFPFDO=NMPFDO.save(commit=False)
             MFPFDO.username=MFUFDO
             MFPFDO.save()
-            
+            send_mail('registartion',
+                      'Thank u for registration',
+                      'chandan10081999@gmail.com',
+                      [MFUFDO.email],
+                      fail_silently=False)
+
 
 
             return HttpResponse('Registartion is Successfull')
