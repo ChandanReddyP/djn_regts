@@ -79,3 +79,32 @@ def display_data(request):
     PO=Profile.objects.get(username=UO)
     d={'UO':UO,'PO':PO}
     return render(request,'display_data.html',d)
+
+
+@login_required
+def change_password(request):
+    if request.method=='POST':
+        cpw=request.POST['cpw']
+        username=request.session['username']
+        UO=User.objects.get(username=username)
+        UO.set_password(cpw)
+        UO.save()
+        return HttpResponse("password changed successfully")
+    
+    return render(request,'change_password.html')
+
+
+def reset_password(request):
+    if request.method=='POST':
+        pw=request.POST['pw']
+        username=request.POST['un']
+        LUO=User.objects.filter(username=username)
+        if LUO:
+            UO=LUO[0]
+            UO.set_password(pw)
+            UO.save()
+            return HttpResponse('Password is Changed')
+        else:
+            return HttpResponse('User is not present')
+
+    return render(request,'reset_password.html')
